@@ -264,6 +264,7 @@ PLUMED_CONFIG_ENABLE([xdrfile],[search for xdrfile],[yes])
 PLUMED_CONFIG_ENABLE([boost_graph],[search for boost graph],[no])
 PLUMED_CONFIG_ENABLE([boost_serialization],[search for boost serialization],[no])
 PLUMED_CONFIG_ENABLE([fftw],[search for fftw],[yes])
+PLUMED_CONFIG_ENABLE([googletest],[search for googletest],[yes])
 PLUMED_CONFIG_ENABLE([python],[search for python],[yes])
 PLUMED_CONFIG_ENABLE([af_ocl],[search for arrayfire_ocl],[no])
 PLUMED_CONFIG_ENABLE([af_cuda],[search for arrayfire_cuda],[no])
@@ -792,6 +793,18 @@ fi
 
 if test $fftw == true ; then
   PLUMED_CHECK_PACKAGE([fftw3.h],[fftw_execute],[__PLUMED_HAS_FFTW],[fftw3])
+fi
+
+if test $googletest == true ; then
+  PLUMED_CHECK_CXX_PACKAGE([googletest],[
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+TEST(Basic,Matcher) { EXPECT_THAT(1 + 1, ::testing::Eq(2)); }
+int main(int argc, char** argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
+  ], [__PLUMED_HAS_GOOGLETEST], [gtest])
 fi
 
 if test $python == true  ; then
